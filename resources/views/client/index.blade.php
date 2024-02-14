@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.client.app')
 @section('title', 'Dashboard')
 @section('content')
     <div class="row">

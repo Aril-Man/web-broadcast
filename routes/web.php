@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClientController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->group(function() {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+Auth::routes();
+Route::get('/', [LoginController::class, 'index']);
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::group(['middleware' => ['IsAdmin']], function () {
+    Route::prefix('admin')->group(function() {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    });
+});
+
+
+Route::group(['middleware' => ['IsClient']], function () {
+    Route::prefix('client')->group(function () {
+        Route::get('/', [ClientController::class, 'index'])->name('client.index');
+    });
 });

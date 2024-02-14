@@ -41,10 +41,12 @@ class LoginController extends Controller
 
     public function index()
     {
-        if(Auth::user()->role == "admin"){
-            return redirect()->route('admin.index');
-        }elseif(Auth::user()->role == "client"){
-            return redirect()->route('client.index');
+        if (Auth::user() != null) {
+            if(Auth::user()->role == "admin"){
+                return redirect()->route('admin.index');
+            }else if(Auth::user()->role == "client"){
+                return redirect()->route('client.index');
+            }
         }
         return view('auth.login');
     }
@@ -64,13 +66,16 @@ class LoginController extends Controller
             return redirect()->route('login')->with('error','Login Failed');
         }
 
-        if (Auth::user()->role == "admin") {
-            return redirect()->route('admin.index');
-        }else if (Auth::user()->role == "client"){
-            return redirect()->route('client.index');
-        }else {
-            return redirect()->route('login')->with('error', $wordingError);
+        if (Auth::user() != null) {
+            if (Auth::user()->role == "admin") {
+                return redirect()->route('admin.index');
+            }else if (Auth::user()->role == "client"){
+                return redirect()->route('client.index');
+            }
         }
+
+        return redirect()->route('login')->with('error', $wordingError);
+
     }
 
     public function logout()
