@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use App\Models\quota;
+use App\Models\Receiver;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
 
@@ -115,11 +117,53 @@ class AdminController extends Controller
 
         $data = new stdClass();
         $data->campaigns = Campaign::leftJoin('users', 'users.id', '=', 'campaigns.client_id')
-                                    ->select('campaigns.*', 'users.name as client_name')
+                                    ->select('campaigns.*', 'users.name as client_name', 'users.id as client_id')
                                     ->where('users.role', 'client')
                                     ->get();
 
         return view('admin.campaign.index', compact('data'));
+
+    }
+
+    public function processCampaign($id, $client_id) {
+
+        $phone = [];
+        $campaign = Campaign::where('id', $id)->first();
+        $receiver = Receiver::select('phone')->where('campaign_id', $id)->get();
+        $totalReceiver = Receiver::where('campaign_id', $id)->count();
+        $quota = quota::where('client_id', $client_id)->first();
+
+        if ($quota->quota < $totalReceiver) {
+            return response()->json(['status' => false, 'message' => 'Insufficient quota'], 400);
+        }
+
+        foreach ($receiver as $r) {
+            array_push($phone, $r->phone);
+        }
+
+        $data = [
+            "content" => $campaign->content,
+            "phone" => $phone
+        ];
+
+        $response = Http::withBody(json_encode($data), 'application/json')->post(env('URL_BROADCAST') . '/api/v.0.2/broadcast');
+
+        if ($response->successful()) {
+            Campaign::where('id', $id)->update([
+                'status' => 'done'
+            ]);
+
+            quota::where('client_id', $client_id)->update([
+                'quota' => $quota->quota - $totalReceiver
+            ]);
+
+            return response()->json(['status' => true, 'message' => 'Success send broadcast']);
+        }else {
+            Campaign::where('id', $id)->update([
+                'status' => 'failed'
+            ]);
+            return response()->json(['status' => false, 'message' => 'Failed send broadcast'], 400);
+        }
 
     }
 }

@@ -56,7 +56,7 @@
                                             <td>{{ $row->name }}</td>
                                             <td>{{ $row->client_name }}</td>
                                             <td>{{ Str::substr($row->content, 0, 50) . '...' }}</td>
-                                            <td class="text-center">
+                                            <td>
                                                 @if ($row->status == 'ready')
                                                     <div class="btn btn-warning fw-bolder">
                                                         {{ ucfirst($row->status) }}
@@ -67,18 +67,18 @@
                                                     </div>
                                                 @elseif ($row->status == 'done')
                                                     <div class="btn btn-success fw-bolder">
-                                                        {{ ucfirst('in progress') }}
+                                                        {{ ucfirst('done') }}
                                                     </div>
                                                 @else
-                                                    <div class="btn btn-info fw-bolder">
+                                                    <div class="btn btn-danger fw-bolder">
                                                         {{ ucfirst($row->status) }}
                                                     </div>
                                                 @endif
 
                                             </td>
-                                            <td class="text-center">
-                                                @if ($row->status == 'ready')
-                                                    <button class="btn btn-success">Ready</button>
+                                            <td>
+                                                @if ($row->status == 'ready' || $row->status == 'failed')
+                                                    <button class="btn btn-success" onclick="approval({{ $row->id }}, {{ $row->client_id }})">Process</button>
                                                 @else
                                                 -
                                                 @endif
@@ -106,7 +106,46 @@
         $('#data').DataTable();
     });
 
-    function openModal() {
+    function approval(id, client_id) {
+        const url = `{{ url('/admin/process/broadcast') }}/${id}/${client_id}`
+
+        Swal.fire({
+            title: "Are you sure process this campaign ?",
+            icon: "question",
+            iconHtml: "?",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            showCancelButton: true,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(result) {
+                        Swal.fire({
+                            title: "Successfully!",
+                            text: "Sending Successfully!",
+                            icon: "success",
+                            confirmButtonText: 'Oke'
+                        }).then((result) => {
+                            location.reload();
+                        })
+                    },
+                    error: function(data) {
+                        Swal.fire({
+                                title: "Failed!",
+                                text: data.responseJSON.message,
+                                icon: "error"
+                            })
+                    }
+                })
+            }
+        });
+
 
     }
 

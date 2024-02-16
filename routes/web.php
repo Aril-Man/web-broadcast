@@ -30,6 +30,7 @@ Route::group(['middleware' => ['IsAdmin']], function () {
         Route::get('/campaign', [AdminController::class, 'campaignIndex'])->name('admin.campaign.index');
 
         Route::post('client', [AdminController::class, 'clientStore'])->name('admin.client.store');
+        Route::post('/process/broadcast/{id}/{client_id}', [AdminController::class, 'processCampaign'])->name('admin.process_broadcast');
     });
 });
 

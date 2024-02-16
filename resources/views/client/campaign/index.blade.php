@@ -51,7 +51,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Name</th>
-                                                    <th>Content</th> 
+                                                    <th>Content</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -60,7 +60,7 @@
                                                 @foreach ($campaigns as $row)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $row->name }}</td> 
+                                                        <td>{{ $row->name }}</td>
                                                         <td>{{ Str::substr($row->content, 0, 50) . '...' }}</td>
                                                         <td class="">
                                                             @if ($row->status == 'ready')
@@ -73,7 +73,7 @@
                                                                 </div>
                                                             @elseif ($row->status == 'done')
                                                                 <div class="btn btn-success fw-bolder">
-                                                                    {{ ucfirst('in progress') }}
+                                                                    {{ ucfirst('done') }}
                                                                 </div>
                                                             @else
                                                                 <div class="btn btn-info fw-bolder">
@@ -83,7 +83,7 @@
 
                                                         </td>
                                                         <td class="">
-                                                            @if ($row->status != 'ready')
+                                                            @if ($row->status != 'ready' && $row->status != 'done')
                                                                 <button class="btn btn-success" onclick="confirm({{$row->id}})">Ready</button>
                                                             @else
                                                             -
@@ -129,7 +129,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     updateStatus(id)
-                } 
+                }
             });
         }
 
