@@ -25,6 +25,8 @@ Route::group(['middleware' => ['IsAdmin']], function () {
     Route::prefix('admin')->group(function() {
         Route::get('/', [AdminController::class, 'index'])->name('admin.index');
         Route::get('/client', [AdminController::class, 'clientIndex'])->name('admin.client.index');
+        Route::get('/client/{id}', [AdminController::class, 'getClientById'])->name('admin.client.detail');
+        Route::patch('/client/update', [AdminController::class, 'updateClient'])->name('admin.client.update');
         Route::get('/campaign', [AdminController::class, 'campaignIndex'])->name('admin.campaign.index');
 
         Route::post('client', [AdminController::class, 'clientStore'])->name('admin.client.store');

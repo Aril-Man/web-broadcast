@@ -57,6 +57,60 @@ class AdminController extends Controller
         return redirect()->route('admin.client.index')->with('success', 'Success add client');
     }
 
+    public function getClientById($id) {
+
+        $data = new stdClass();
+        $data->client = User::leftJoin('quotas', 'quotas.client_id', '=', 'users.id')
+                                ->select('users.*', 'quotas.quota')
+                                ->where('users.id', $id)->first();
+
+        if ($data->client == null) {
+            return response()->json(['status' => false, 'message' => 'Data not found']);
+        }
+
+        return response()->json(['status' => true, 'message' => 'Get data success', 'data' => $data]);
+    }
+
+    public function updateClient(Request $req) {
+        try {
+
+            $validator = Validator::make($req->all(), [
+                'name' => 'required',
+                'email' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors()->first(), 400);
+            }
+
+            $client_id = $req->client_id;
+            $email = $req->email;
+            $name = $req->name;
+            $isEmail = $req->isEmail;
+
+            if ($isEmail == "true") {
+                $validate = User::where('email', $email)->first();
+                if ($validate != null) {
+                    return response()->json("This email is already registered", 400);
+                }
+            }
+
+            $updated = User::where('id', $client_id)
+                ->update([
+                    'name' => $name,
+                    'email' => $email,
+                ]);
+                quota::where('client_id', $client_id)
+                    ->update([
+                        'quota' => $req->qty
+                    ]);
+
+            return response()->json($updated);
+        } catch (\Throwable $th) {
+            return response()->json($th);
+        }
+    }
+
     public function campaignIndex() {
 
         $data = new stdClass();

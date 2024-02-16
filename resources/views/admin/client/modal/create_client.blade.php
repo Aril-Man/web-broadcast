@@ -17,7 +17,7 @@
                                 Required Field
                             </div>
                         </div>
-                        <input id="name" type="name" class="form-control" name="name" tabindex="1" required autofocus>
+                        <input type="name" class="form-control" name="name" tabindex="1" required autofocus>
                     </div>
                     <div class="form-group mt-4">
                         <div class="d-flex gap-2">
@@ -26,7 +26,7 @@
                                 Required Field
                             </div>
                         </div>
-                        <input id="email" type="email" class="form-control" name="email" tabindex="1" required
+                        <input type="email" class="form-control" name="email" tabindex="1" required
                             autofocus>
                     </div>
                     <div class="form-group mt-4">
@@ -36,7 +36,7 @@
                                 Required Field
                             </div>
                         </div>
-                        <input id="qty" type="number" min="1" class="form-control" name="qty" tabindex="1" required
+                        <input type="number" min="1" class="form-control" name="qty" tabindex="1" required
                             autofocus>
                     </div>
                 </div>

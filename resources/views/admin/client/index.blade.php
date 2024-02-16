@@ -3,6 +3,7 @@
 @section('title', 'List All Client')
 @section('content')
     @include('admin.client.modal.create_client')
+    @include('admin.client.modal.edit_client')
     <section class="section">
         <div class="section-header">
             <h1>List All Client</h1>
@@ -61,8 +62,7 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
-                                                            <a class="text-info"
-                                                                href="">{{ $row->name }}</a>
+                                                            <a class="text-info" style="cursor: pointer;" onclick="openModalEdit('{{ $row->id }}')">{{ $row->name }}</a>
                                                         </td>
                                                         <td>{{ number_format($row->quota, 0, ',', '.') }}</td>
                                                         <td>{{ $row->email }}</td>
@@ -93,6 +93,27 @@
         function openModal() {
             $('#create-client').trigger("reset");
             $('#modal_create_client').modal('show')
+        }
+
+        function openModalEdit(id) {
+            $('#modal_edit_client').modal('show')
+
+            const url = `{{ url('/admin/client' ) }}/${id}`
+
+            $.ajax({
+                url : url,
+                type : 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success : function (result) {
+                    $('#client_id').val(result.data.client.id);
+                    $('#name').val(result.data.client.name);
+                    $('#email').val(result.data.client.email);
+                    $('#qty').val(result.data.client.quota);
+                }
+            })
+
         }
 
     </script>

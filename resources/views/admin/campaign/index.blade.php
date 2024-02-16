@@ -58,15 +58,15 @@
                                             <td>{{ Str::substr($row->content, 0, 50) . '...' }}</td>
                                             <td class="text-center">
                                                 @if ($row->status == 'ready')
-                                                <div class="btn btn-success fw-bolder">
-                                                    {{ ucfirst($row->status) }}
-                                                </div>
-                                                @elseif ($row->status == 'prepare')
                                                 <div class="btn btn-warning fw-bolder">
                                                     {{ ucfirst($row->status) }}
                                                 </div>
+                                                @elseif ($row->status == 'prepare')
+                                                <div class="btn btn-primary fw-bolder">
+                                                    {{ ucfirst($row->status) }}
+                                                </div>
                                                 @elseif ($row->status == 'done')
-                                                <div class="btn btn-danger fw-bolder">
+                                                <div class="btn btn-success fw-bolder">
                                                     {{ ucfirst('in progress') }}
                                                 </div>
                                                 @else
