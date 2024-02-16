@@ -35,5 +35,7 @@ Route::group(['middleware' => ['IsAdmin']], function () {
 Route::group(['middleware' => ['IsClient']], function () {
     Route::prefix('client')->group(function () {
         Route::get('/', [ClientController::class, 'index'])->name('client.index');
+        Route::get('/campaign', [ClientController::class, 'campaignIndex'])->name('client.campaign.index');
+        Route::post('campaign', [ClientController::class, 'campaignStore'])->name('client.campaign.store');
     });
 });

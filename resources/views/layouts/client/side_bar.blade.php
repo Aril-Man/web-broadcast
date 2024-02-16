@@ -28,7 +28,7 @@
                     <span class="hide-menu">User Tools</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link sidebar-link warning-hover-bg" href=""
+                    <a class="sidebar-link sidebar-link warning-hover-bg" href="{{ route('client.campaign.index') }}"
                         aria-expanded="false">
                         <span class="aside-icon p-2 bg-light-warning rounded-3">
                             <i class="ti ti-article fs-7 text-warning"></i>
