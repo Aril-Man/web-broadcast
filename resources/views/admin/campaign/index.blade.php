@@ -58,27 +58,27 @@
                                             <td>{{ Str::substr($row->content, 0, 50) . '...' }}</td>
                                             <td class="text-center">
                                                 @if ($row->status == 'ready')
-                                                <div class="btn btn-warning fw-bolder">
-                                                    {{ ucfirst($row->status) }}
-                                                </div>
+                                                    <div class="btn btn-warning fw-bolder">
+                                                        {{ ucfirst($row->status) }}
+                                                    </div>
                                                 @elseif ($row->status == 'prepare')
-                                                <div class="btn btn-primary fw-bolder">
-                                                    {{ ucfirst($row->status) }}
-                                                </div>
+                                                    <div class="btn btn-primary fw-bolder">
+                                                        {{ ucfirst($row->status) }}
+                                                    </div>
                                                 @elseif ($row->status == 'done')
-                                                <div class="btn btn-success fw-bolder">
-                                                    {{ ucfirst('in progress') }}
-                                                </div>
+                                                    <div class="btn btn-success fw-bolder">
+                                                        {{ ucfirst('in progress') }}
+                                                    </div>
                                                 @else
-                                                <div class="btn btn-info fw-bolder">
-                                                    {{ ucfirst($row->status) }}
-                                                </div>
+                                                    <div class="btn btn-info fw-bolder">
+                                                        {{ ucfirst($row->status) }}
+                                                    </div>
                                                 @endif
 
                                             </td>
                                             <td class="text-center">
                                                 @if ($row->status == 'ready')
-                                                <button class="btn btn-success">Process</button>
+                                                    <button class="btn btn-success">Ready</button>
                                                 @else
                                                 -
                                                 @endif

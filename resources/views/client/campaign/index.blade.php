@@ -52,6 +52,8 @@
                                                     <th>#</th>
                                                     <th>Name</th>
                                                     <th>Content</th> 
+                                                    <th>Status</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -59,7 +61,34 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $row->name }}</td> 
-                                                        <td>{{ $row->content }}</td>
+                                                        <td>{{ Str::substr($row->content, 0, 50) . '...' }}</td>
+                                                        <td class="">
+                                                            @if ($row->status == 'ready')
+                                                                <div class="btn btn-warning fw-bolder">
+                                                                    {{ ucfirst($row->status) }}
+                                                                </div>
+                                                            @elseif ($row->status == 'prepare')
+                                                                <div class="btn btn-primary fw-bolder">
+                                                                    {{ ucfirst($row->status) }}
+                                                                </div>
+                                                            @elseif ($row->status == 'done')
+                                                                <div class="btn btn-success fw-bolder">
+                                                                    {{ ucfirst('in progress') }}
+                                                                </div>
+                                                            @else
+                                                                <div class="btn btn-info fw-bolder">
+                                                                    {{ ucfirst($row->status) }}
+                                                            </div>
+                                                            @endif
+
+                                                        </td>
+                                                        <td class="">
+                                                            @if ($row->status != 'ready')
+                                                                <button class="btn btn-success" onclick="confirm({{$row->id}})">Ready</button>
+                                                            @else
+                                                            -
+                                                            @endif
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -88,5 +117,56 @@
             $('#modal_create').modal('show')
         }
 
+        function confirm(id){
+            Swal.fire({
+                title: "Are you sure?",
+                icon: "question",
+                iconHtml: "?",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                showCancelButton: true,
+                showCloseButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateStatus(id)
+                } 
+            });
+        }
+
+         function updateStatus(id) {
+            const url = `{{ route('client.campaign.put') }}`;
+            let data = {
+                'campaign_id': id
+            }
+
+            console.log(data);
+
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: data,
+                success: function (result) {
+                    if (result == 1) {
+                        Swal.fire({
+                            title: "Successfully!",
+                            text: "Campaign Updated Successfully!",
+                            icon: "success",
+                            confirmButtonText: 'Oke'
+                        }).then((result) => {
+                            location.reload();
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result,
+                        });
+                    }
+                }
+            })
+        }
     </script>
 @endsection

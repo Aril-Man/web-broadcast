@@ -32,8 +32,7 @@ class ClientController extends Controller
         return view('client.campaign.index', compact("campaigns"));
     }
 
-     public function campaignStore(Request $req) {
-
+    public function campaignStore(Request $req) {
         $validator = Validator::make($req->all(), [
             'name' => 'required',
             'content' => 'required',
@@ -61,5 +60,17 @@ class ClientController extends Controller
         }
         
         return redirect()->route('client.campaign.index')->with('success', 'Success add campaign');
+    }
+
+    public function campaignPut(Request $req) {
+        try {
+            $updated = Campaign::where('id', $req->campaign_id)
+                ->update([
+                    'status' => 'ready',
+                ]);
+            return response()->json($updated);
+        } catch (\Throwable $th) {
+            return response()->json($th);
+        }
     }
 }

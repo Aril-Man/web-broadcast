@@ -39,5 +39,6 @@ Route::group(['middleware' => ['IsClient']], function () {
         Route::get('/', [ClientController::class, 'index'])->name('client.index');
         Route::get('/campaign', [ClientController::class, 'campaignIndex'])->name('client.campaign.index');
         Route::post('campaign', [ClientController::class, 'campaignStore'])->name('client.campaign.store');
+        Route::put('campaign', [ClientController::class, 'campaignPut'])->name('client.campaign.put');
     });
 });
