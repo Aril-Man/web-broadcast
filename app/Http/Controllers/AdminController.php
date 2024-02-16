@@ -56,4 +56,16 @@ class AdminController extends Controller
 
         return redirect()->route('admin.client.index')->with('success', 'Success add client');
     }
+
+    public function campaignIndex() {
+
+        $data = new stdClass();
+        $data->campaigns = Campaign::leftJoin('users', 'users.id', '=', 'campaigns.client_id')
+                                    ->select('campaigns.*', 'users.name as client_name')
+                                    ->where('users.role', 'client')
+                                    ->get();
+
+        return view('admin.campaign.index', compact('data'));
+
+    }
 }
