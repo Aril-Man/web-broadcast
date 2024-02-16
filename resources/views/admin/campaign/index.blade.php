@@ -43,6 +43,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
+                                            <th>Client Name</th>
                                             <th>Content</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -52,9 +53,8 @@
                                         @foreach ($data->campaigns as $row)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>
-                                                {{ $row->name }}
-                                            </td>
+                                            <td>{{ $row->name }}</td>
+                                            <td>{{ $row->client_name }}</td>
                                             <td>{{ Str::substr($row->content, 0, 50) . '...' }}</td>
                                             <td class="text-center">
                                                 @if ($row->status == 'ready')
