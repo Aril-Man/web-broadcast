@@ -28,7 +28,7 @@
                     <span class="hide-menu">User Tools</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link sidebar-link success-hover-bg" href=""
+                    <a class="sidebar-link sidebar-link success-hover-bg" href="{{ route('admin.client.index') }}"
                         aria-expanded="false">
                         <span class="aside-icon p-2 bg-light-success rounded-3">
                             <i class="ti ti-user fs-7 text-success"></i>
